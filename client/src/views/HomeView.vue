@@ -1,18 +1,45 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <VDatePicker v-model="date" />
+    <div v-if="user === null">Loading...</div>
+    <div v-else>{{ user }}</div>
+    
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import axios from "axios";
 
 export default {
-  name: 'HomeView',
-  components: {
-    HelloWorld
-  }
-}
+  name: "HomeView",
+  data() {
+    return {
+      user: null,
+      date: new Date(),
+    };
+  },
+  computed: {
+    formattedDate() {
+      const options = { month: "long", day: "numeric", year: "numeric" };
+      return this.date.toLocaleDateString("en-US", options);
+    },
+  },
+  methods: {
+    getuser()
+    {
+      try {
+      const response =  axios.get("http://localhost:8000/api/user");
+      this.user= response.data;
+    } catch (error) {
+      return error
+    }
+    }
+  },
+  mounted() {
+    // No changes here
+  },
+  async created() {
+    await this.getuser();
+  },
+};
 </script>

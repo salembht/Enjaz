@@ -30,7 +30,7 @@ class AccountController extends Controller
     public function register(Request $request)
     {
         return $user=User::create([
-            'name'=>$request->username,
+            'name'=>$request->name,
             'email'=>$request->email,
             'password'=>Hash::make($request->password) ,
         ]);
