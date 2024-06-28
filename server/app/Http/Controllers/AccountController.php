@@ -13,38 +13,43 @@ class AccountController extends Controller
 {
     public function login(Request $request)
     {
-     if(!Auth::attempt([
-            'email'=>$request->email,
-            'password'=>$request->password 
-        ]))
-        {
-            return response(['message'=>'الايميل او كلمه السر خاطئة'],Response::HTTP_UNAUTHORIZED);
+        if (
+            !Auth::attempt([
+                'email' => $request->email,
+                'password' => $request->password
+            ])
+        ) {
+            return response(['message' => 'الايميل او كلمه السر خاطئة'], Response::HTTP_UNAUTHORIZED);
         }
-        $user=Auth::user();
-        $token=$user->createToken('token')->plainTextToken;
-        $cooki =cookie('jwt',$token,60*24*30);
+        $user = Auth::user();
+        $token = $user->createToken('token')->plainTextToken;
+        $cooki = cookie('jwt', $token, 60 * 24 * 30);
         return response([
-            'message'=>"تم تسجيل الدخول بنجاح"
+            'message' => "تم تسجيل الدخول بنجاح",
+            'authorisation' => [
+                'token' => $token,
+                'type' => 'bearer',
+            ]
         ])->withCookie($cooki);
-    }   
+    }
     public function register(Request $request)
     {
-        return $user=User::create([
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'password'=>Hash::make($request->password) ,
+        return $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
         ]);
-        
-    }  
+
+    }
     public function user()
     {
         return Auth::user();
     }
     public function logout()
     {
-        $cookie=Cookie::forget('jwt');
+        $cookie = Cookie::forget('jwt');
         return response([
-            'message'=>"تم تسجل خروجك بنجاح"
+            'message' => "تم تسجل خروجك بنجاح"
         ])->withCookie($cookie);
     }
 }
