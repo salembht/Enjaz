@@ -23,18 +23,36 @@ const routes = [
   {
     path: '/Sighnup',
     name: 'Sighnup',
-    component: () => import( '../views/SighnupView.vue')
+    component: () => import( '../views/SighnupView.vue'),
+    
   },
   {
     path: '/UserHome',
     name: 'UserHome',
-    component: () => import( '../views/UserHomeView.vue')
+    component: () => import( '../views/UserHomeView.vue'),
+    meta: {
+      requiresAuth: true
+  }
   },
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(),
   routes
 })
 
+
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth) ) {
+        const token = localStorage.getItem('authToken');
+        if (token) {
+            next();
+            return;
+        } else {
+            router.push('/login');
+        }
+    } else {
+        next();
+    }
+});
 export default router

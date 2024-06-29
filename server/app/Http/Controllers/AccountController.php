@@ -23,14 +23,14 @@ class AccountController extends Controller
         }
         $user = Auth::user();
         $token = $user->createToken('token')->plainTextToken;
-        $cooki = cookie('jwt', $token, 60 * 24 * 30);
-        return response([
+        return response()->json([
+            'user'=> $user ,
             'message' => "تم تسجيل الدخول بنجاح",
             'authorisation' => [
                 'token' => $token,
                 'type' => 'bearer',
-            ]
-        ])->withCookie($cooki);
+            ],
+        ],200);
     }
     public function register(Request $request)
     {
@@ -46,11 +46,11 @@ class AccountController extends Controller
         return Auth::user();
     }
     public function logout()
-    {
-        $cookie = Cookie::forget('jwt');
-        // Auth::user()->currentAccessToken()->delete();
+    { 
+        $user = Auth::user();
+        $user->tokens()->delete();
         return response([
             'message' => "تم تسجل خروجك بنجاح"
-        ])->withCookie($cookie);
+        ], 200);
     }
 }

@@ -1,13 +1,15 @@
 <template>
   <div class="container">
-    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+    <header
+      class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
       <div class="col-md-3 mb-2 mb-md-0">
         إنجاز
       </div>
 
       <ul class="nav col-12 col-md-auto mb-2 justify-content-start mb-md-0">
         <li> <router-link class="nav-link px-2 link-secondary" to="/">الصفحة الرئسية</router-link> </li>
-        <li v-if="isLoggedIn"> <router-link class="nav-link px-2 link-secondary" to="/UserHome"> مهماتي </router-link> </li>
+        <li v-if="isLoggedIn"> <router-link class="nav-link px-2 link-secondary" to="/UserHome"> مهماتي </router-link>
+        </li>
       </ul>
 
       <div class="col-md-3 text-end">
@@ -17,17 +19,17 @@
         <button v-if="!isLoggedIn" type="button" class="btn btn-primary m-3">
           <router-link class="nav-link px-2 " to="/Sighnup">تسجيل </router-link>
         </button>
-        <button v-if="isLoggedIn" type="button" class="btn btn-outline-danger me-2" @click="submitlogout">
+        <button v-if="isLoggedIn" type="button" class="btn btn-outline-danger me-2" @click="logout">
           تسجيل خروج
         </button>
       </div>
     </header>
-    
+
     <div v-if="showLoginMessage" class="login-message">
-    تحتاج لستجيل الدخول اولا 
+      تحتاج لستجيل الدخول اولا
     </div>
   </div>
-  <router-view/>
+  <router-view />
 </template>
 
 <script>
@@ -43,6 +45,7 @@ export default {
   },
   created() {
     this.fetchUser()
+    this.checkAuthentication()
   },
   computed: {
     ...mapGetters(['getUser', 'isLoggedIn'])
@@ -63,13 +66,6 @@ export default {
         this.loading = false
       }
     },
-    async logout() {
-      try {
-        await this.$store.dispatch('logout')
-      } catch (error) {
-        console.error(error)
-      }
-    },
     navigateTo(route) {
       if (this.$store.getters.isLoggedIn) {
         this.$router.push(route)
@@ -77,18 +73,18 @@ export default {
         this.showLoginMessage = true
         this.$router.push('/login')
       }
+    },
+    checkAuthentication() {
+      const authToken = localStorage.getItem('authToken')
+      if (authToken) {
+        // Dispatch an action to set the user's authenticated state
+        this.$store.dispatch('setUserAuthenticated', { authToken })
+      }
     }
   },
-  mounted(){
-  //   const authToken = localStorage.getItem('authToken');
-  // const tokenExpiration = localStorage.getItem('tokenExpiration');
-  // if (authToken && tokenExpiration > Date.now()) {
-  //   // Use the token to authenticate the user and update the app state
-  //   this.authenticateUser(authToken);
-  // } else {
-  //   // Token has expired, prompt the user to log in again
-  //   this.showLoginPrompt();
-  // }
-  }
+  mounted() {
+
+  },
+
 }
 </script>

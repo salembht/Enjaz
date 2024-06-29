@@ -16,11 +16,12 @@
             <div class="invalid-feedback">يرجى ادخال كلمه المرور.</div>
           </div>
           <div class="form-group form-check mb-3">
-            <input type="checkbox" class="form-check-input border-2" id="remember-me" name="remember-me" v-model="rememberMe" />
+            <input type="checkbox" class="form-check-input border-2" id="remember-me" name="remember-me"
+              v-model="rememberMe" />
             <label class="form-check-label" for="remember-me">تذكرني</label>
           </div>
           <label class="form-check-label" for="remember-me">ليس لدي حساب ؟ <router-link
-            to="/Sighnup">تسجيل</router-link></label>
+              to="/Sighnup">تسجيل</router-link></label>
           <button type="submit" class="btn btn-primary w-100" :disabled="isSubmitting">
             {{ isSubmitting ? "Logging in..." : "Login" }}
           </button>
@@ -31,12 +32,13 @@
 </template>
 
 <script>
-/* eslint-disable */ 
+/* eslint-disable */
 // eslint-disable-next-line no-unused-vars
 import axios from "axios";
 import Swal from "sweetalert2";
 // eslint-disable-next-line no-unused-vars
 import { mapGetters, mapActions } from 'vuex'
+import Cookies from "js-cookie";
 export default {
   data() {
     return {
@@ -44,7 +46,7 @@ export default {
       password: "",
       rememberMe: false,
       isSubmitting: false,
-      expirationTime:0
+
     };
   },
   methods: {
@@ -57,17 +59,16 @@ export default {
           // eslint-disable-next-line no-unused-vars
           const response = await this.login({
             email: this.email,
-            password: this.password
+            password: this.password,
           })
-          //  this.$cookies.set('jwt', response.authorisation.token);
-          localStorage.setItem('authToken', response.authorisation.token);
-          if(this.rememberMe)
-          {
-            this.expirationTime=60*24*30
-          }
-          localStorage.setItem('tokenExpiration', this.expirationTime);
-          axios.defaults.headers.common['Authorization'] = `Bearer ${response.authorisation.token}`;
-          this.$router.push('/UserHome')
+          if (this.rememberMe) {
+              Cookies.set("userTokens", response.data.authorisation.token, { expires: 30 });
+            }else{
+              Cookies.set("userTokens", response.data.authorisation.token, { expires: null });
+            }
+           localStorage.setItem('authToken', response.data.authorisation.token);
+           axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.authorisation.token}`;
+           this.$router.push('/UserHome')
           Swal.fire({
             icon: 'success',
             title: 'اهلا بك',
@@ -85,7 +86,7 @@ export default {
       } else {
         this.$refs.form.classList.add('was-validated')
       }
-    }
+    },
 
   },
   mounted() {

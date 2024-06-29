@@ -1,7 +1,7 @@
 import { createStore } from 'vuex'
 import axios from 'axios'
 import router from '@/router' // Assuming you have a router instance
-// import auth from '../services/auth';
+import Swal from "sweetalert2";
 export default createStore({
   state: {
     user: null,
@@ -13,7 +13,7 @@ export default createStore({
     },
     getUser(state) {
       return state.user
-    }
+    },
   },
   mutations: {
     SET_USER(state, user) {
@@ -29,17 +29,18 @@ export default createStore({
   },
   actions: {
     /* eslint-disable */
-    async login({ commit }, { email, password }) {
+    
+    async login({ commit }, { email, password  }) {
       try {
         const response = await axios.post('http://localhost:8000/api/login', {
           email,
           password,
-          
+        
         })
         commit('SET_USER', response.data.user)
-        commit('SET_TOKEN', response.data.token)
-        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
-        return response.data
+        commit('SET_TOKEN', response.data.authorisation.token)
+        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.authorisation.token}`;
+        return response
       } catch (error) {
         throw error
       }
@@ -48,12 +49,16 @@ export default createStore({
       try {
         // Make a POST request to the logout endpoint
        const response= await axios.post('http://localhost:8000/api/logout')
-
         // Clear the user and token from the state
         commit('CLEAR_USER_AND_TOKEN')
-        localStorage.removeItem('token');
+        localStorage.removeItem('authToken');
         delete axios.defaults.headers.common['Authorization'];
         // Redirect the user to the login page
+        Swal.fire({
+          icon: 'success',
+          title: 'وداعا ',
+          text: `لقد تم تسجيل خروجك بنجاح`
+        })
         router.push('/login')
       } catch (error) {
         // Handle the error

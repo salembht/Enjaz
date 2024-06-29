@@ -8,9 +8,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('register',[AccountController::class,'register']);
 Route::post('login',[AccountController::class,'login'])->name('login');
-Route::post('logout',[AccountController::class,'logout']);
+
 Route::middleware('auth:sanctum')->group(function(){
 Route::get('user',[AccountController::class,'user']);
+Route::post('logout',[AccountController::class,'logout']);
 Route::prefix('tasks')->group(function () {
     Route::get('/', [TaskController::class, 'index']);
     Route::post('/', [TaskController::class, 'store']);
