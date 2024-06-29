@@ -14,11 +14,13 @@ class TaskController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function index()
-    {
-        $tasks = Task::whereBelongsTo(Auth::user(),'user_id');
-        return response()->json($tasks);
-    }
+        public function index()
+        {
+            
+            // return response()->json();
+            $tasks = Task::where('user_id', Auth::id())->get();
+            return response()->json($tasks);
+        }
 
     /**
      * Store a newly created task for the authenticated user.
@@ -30,11 +32,13 @@ class TaskController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
             'date' => 'nullable|date',
         ]);
-
-        $task = Task::whereBelongsTo(Auth::user(),'user_id')->create($request->all());
+        $task = Task::create([
+            'title' => $request->title,
+            'date' => $request->date,
+            'user_id' => Auth::id(),
+        ]);
 
         return response()->json($task, 201);
     }
@@ -61,7 +65,7 @@ class TaskController extends Controller
     public function update(Request $request, $id)
     {
         
-        $task = Task::whereBelongsTo(Auth::user(),'user_id')->findOrFail($id);
+        $task = Task::where('user_id', Auth::id())->findOrFail($id);
         $task->update($request->all());
         return response()->json($task);
     }
@@ -74,7 +78,7 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        $task = Task::whereBelongsTo(Auth::user(),'user_id')->findOrFail($id);
+        $task = Task::where('user_id', Auth::id())->findOrFail($id);
         $task->delete();
         return response()->json(null, 204);
     }
@@ -87,13 +91,13 @@ class TaskController extends Controller
      */
     public function complete($id)
     {
-        $task = Task::whereBelongsTo(Auth::user(),'user_id')->findOrFail($id);
+        $task = Task::where('user_id', Auth::id())->findOrFail($id);
         $task->update(['status' => 'complate']);
         return response()->json($task);
     }
     public function uncomplete($id)
     {
-        $task = Task::whereBelongsTo(Auth::user(),'user_id')->findOrFail($id);
+        $task = Task::where('user_id', Auth::id())->findOrFail($id);
         $task->update(['status' => null]);
         return response()->json($task);
     }

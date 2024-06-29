@@ -5,27 +5,29 @@
         إنجاز
       </div>
 
-      <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <li><a href="#" class="nav-link px-2 link-secondary"> <router-link to="/">الصفحة الرئسية</router-link> </a></li>
+      <ul class="nav col-12 col-md-auto mb-2 justify-content-start mb-md-0">
+        <li> <router-link class="nav-link px-2 link-secondary" to="/">الصفحة الرئسية</router-link> </li>
+        <li v-if="isLoggedIn"> <router-link class="nav-link px-2 link-secondary" to="/UserHome"> مهماتي </router-link> </li>
       </ul>
 
       <div class="col-md-3 text-end">
         <button v-if="!isLoggedIn" type="button" class="btn btn-outline-primary me-2">
-          <router-link to="/login">تسجيل دخول</router-link>
+          <router-link class="nav-link px-2 " to="/login">تسجيل دخول</router-link>
         </button>
-        <button v-if="!isLoggedIn" type="button" class="btn btn-dark">
-          <router-link class="nav-link px-2 link-secondary" to="/Sighnup">تسجيل </router-link>
+        <button v-if="!isLoggedIn" type="button" class="btn btn-primary m-3">
+          <router-link class="nav-link px-2 " to="/Sighnup">تسجيل </router-link>
         </button>
         <button v-if="isLoggedIn" type="button" class="btn btn-outline-danger me-2" @click="submitlogout">
           تسجيل خروج
         </button>
       </div>
     </header>
-    <router-view/>
+    
     <div v-if="showLoginMessage" class="login-message">
-     تحتاج لستجيل الدخول اولا 
+    تحتاج لستجيل الدخول اولا 
     </div>
   </div>
+  <router-view/>
 </template>
 
 <script>

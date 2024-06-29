@@ -2,7 +2,7 @@
     <div class="container py-5" style="min-height: 90vh">
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6">
-                <h1 class="text-center mb-5">Sign Up</h1>
+                <h1 class="text-center mb-5">تسجيل </h1>
                 <form @submit.prevent="submitForm" class="needs-validation" novalidate ref="form">
                     <div v-for="(field, index) in fields" :key="index" :class="field.width"
                         class="form-group was-validated mb-2">

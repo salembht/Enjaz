@@ -1,7 +1,7 @@
 import { createStore } from 'vuex'
 import axios from 'axios'
 import router from '@/router' // Assuming you have a router instance
-
+// import auth from '../services/auth';
 export default createStore({
   state: {
     user: null,
@@ -33,10 +33,12 @@ export default createStore({
       try {
         const response = await axios.post('http://localhost:8000/api/login', {
           email,
-          password
+          password,
+          
         })
         commit('SET_USER', response.data.user)
         commit('SET_TOKEN', response.data.token)
+        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
         return response.data
       } catch (error) {
         throw error
@@ -45,11 +47,12 @@ export default createStore({
     async logout({ commit }) {
       try {
         // Make a POST request to the logout endpoint
-        await axios.post('http://localhost:8000/api/logout')
+       const response= await axios.post('http://localhost:8000/api/logout')
 
         // Clear the user and token from the state
         commit('CLEAR_USER_AND_TOKEN')
-
+        localStorage.removeItem('token');
+        delete axios.defaults.headers.common['Authorization'];
         // Redirect the user to the login page
         router.push('/login')
       } catch (error) {
@@ -61,9 +64,9 @@ export default createStore({
       try {
         if (state.token) {
           const response = await axios.get('http://localhost:8000/api/user', {
-            headers: {
-              Authorization: `Bearer ${state.token}`
-            }
+              headers: {      
+                Authorization: `Bearer ${state.token}`
+              }
           })
           commit('SET_USER', response.data)
         } else {

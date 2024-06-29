@@ -48,6 +48,7 @@ class AccountController extends Controller
     public function logout()
     {
         $cookie = Cookie::forget('jwt');
+        // Auth::user()->currentAccessToken()->delete();
         return response([
             'message' => "تم تسجل خروجك بنجاح"
         ])->withCookie($cookie);
