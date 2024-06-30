@@ -5,8 +5,7 @@ import Swal from "sweetalert2";
 export default createStore({
   state: {
     user: null,
-    token: null,
-    isLoggedIn: this.isLoggedIn
+    token: null
   },
   getters: {
     isLoggedIn(state) {
