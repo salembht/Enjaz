@@ -151,7 +151,7 @@ export default {
             // get all data inside formDataInstance
             // const formDataInstance = new FormData();
             axios
-                .post("http://localhost:8000/api/register", this.formData, {
+                .post("https://salem-enjaz.000webhostapp.com/api/register", this.formData, {
                     headers: {
                         "Content-Type": "application/json",
                     },
