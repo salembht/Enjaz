@@ -144,7 +144,7 @@ export default {
     },
     async getTasks() {
   try {
-    const response = await axios.get("https://salem-enjaz.000webhostapp.com/api/tasks");
+    const response = await axios.get("http://localhost:8000/api/tasks");
     this.tasks = response.data;
     return response.data;
   } catch (error) {
@@ -157,7 +157,7 @@ export default {
         const csrfToken = this.getCsrfToken();
 
 
-        axios.post('https://salem-enjaz.000webhostapp.com/api/tasks', {
+        axios.post('http://localhost:8000/api/tasks', {
           title: this.newTasktitle,
           date: this.taskDate,
           _token: csrfToken
@@ -179,8 +179,8 @@ export default {
 
     updateTaskStatus(taskId, completed) {
       const route = completed
-        ? `https://salem-enjaz.000webhostapp.com/api/tasks/complete/${taskId}`
-        : `https://salem-enjaz.000webhostapp.com/api/tasks/uncomplete/${taskId}`;
+        ? `http://localhost:8000/api/tasks/complete/${taskId}`
+        : `http://localhost:8000/api/tasks/uncomplete/${taskId}`;
       const csrfToken = this.getCsrfToken();
       axios
         .post(route, { _token: csrfToken })
@@ -198,7 +198,7 @@ export default {
     updateTask() {
 
       const csrfToken = this.getCsrfToken();
-      axios.put(`https://salem-enjaz.000webhostapp.com/api/tasks/${this.editedTask.id}`, {
+      axios.put(`http://localhost:8000/api/tasks/${this.editedTask.id}`, {
         title: this.editedTask.title,
         _token: csrfToken
       })
@@ -219,7 +219,7 @@ export default {
 
       const csrfToken = this.getCsrfToken();
       axios
-        .delete(`https://salem-enjaz.000webhostapp.com/api/tasks/${taskId}`, { _token: csrfToken })
+        .delete(`http://localhost:8000/api/tasks/${taskId}`, { _token: csrfToken })
         .then(() => {
           this.getTasks();
         })

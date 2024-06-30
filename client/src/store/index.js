@@ -33,7 +33,7 @@ export default createStore({
     
     async login({ commit }, { email, password  }) {
       try {
-        const response = await axios.post('https://salem-enjaz.000webhostapp.com/api/login', {
+        const response = await axios.post('http://localhost:8000/api/login', {
           email,
           password,
         
@@ -49,7 +49,7 @@ export default createStore({
     async logout({ commit }) {
       try {
         // Make a POST request to the logout endpoint
-       const response= await axios.post('https://salem-enjaz.000webhostapp.com/api/logout')
+       const response= await axios.post('http://localhost:8000/api/logout')
         // Clear the user and token from the state
         commit('CLEAR_USER_AND_TOKEN')
         localStorage.removeItem('authToken');
@@ -69,7 +69,7 @@ export default createStore({
     async fetchUser({ commit, state }) {
       try {
         if (state.token) {
-          const response = await axios.get('https://salem-enjaz.000webhostapp.com/api/user', {
+          const response = await axios.get('http://localhost:8000/api/user', {
               headers: {      
                 Authorization: `Bearer ${state.token}`
               }
