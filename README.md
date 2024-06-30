@@ -5,18 +5,29 @@ addtional to the are three buttons edit delet and complate task if it not compla
 
 
 
+<ul>
 
-
-to make this work with you must follow this steps 
-clone the project 
-open new terminal 
-/cd server 
-/composer install 
-/php artisan migrate 
-/php artisan ser 
-and open new terminal 
-/cd client 
-/npm install 
-/npm run serve 
-first do the sgin up 
-and login again 
+<li>to make this work with you must follow this steps </li>
+<li>clone the project </li>
+<li>open new terminal </li>
+<li>/cd server </li>
+<li>/composer install </li>
+<li> make new file named .env and go to  .env.example copy the data from it to .env  </li>
+<li>
+change those to your databaseconnection 
+DB_CONNECTION=
+DB_HOST=
+DB_PORT=
+DB_DATABASE=
+DB_USERNAME=
+DB_PASSWORD=
+</li>
+<li>/php artisan migrate </li>
+<li>/php artisan ser </li>
+<li>and open new terminal </li>
+<li>/cd client </li>
+<li>/npm install </li>
+<li>/npm run serve </li>
+<li>first do the sgin up </li>
+<li>and login again </li>
+</ul>
